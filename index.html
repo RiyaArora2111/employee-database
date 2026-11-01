@@ -1,0 +1,245 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EmployeeDB | Management System</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="navbar">
+    <div class="logo">Employee<span>DB</span></div>
+    <div class="nav-right">
+        <span class="project-tag">DOUBLY LINKED LIST PROJECT</span>
+        <button id="themeBtn" class="theme-btn">☾</button>
+    </div>
+</header>
+
+<main class="container">
+
+    <section class="welcome">
+        <div>
+            <h1>Employee Dashboard</h1>
+            <p>Manage your employee records efficiently.</p>
+        </div>
+        <div class="header-actions">
+            <button id="printBtn" class="secondary-btn">Print Records</button>
+            <button id="exportBtn" class="primary-btn">Export CSV ↓</button>
+        </div>
+    </section>
+
+    <!-- Dashboard Statistics -->
+    <section class="stats-grid">
+
+        <div class="stat-card">
+            <div class="stat-icon">👥</div>
+            <p>Total Employees</p>
+            <h2 id="totalEmployees">0</h2>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon">🏢</div>
+            <p>Departments</p>
+            <h2 id="departmentCount">0</h2>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon">💰</div>
+            <p>Average Salary</p>
+            <h2 id="averageSalary">₹0</h2>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon">⭐</div>
+            <p>Highest Salary</p>
+            <h2 id="highestSalary">₹0</h2>
+        </div>
+
+    </section>
+
+    <section class="main-layout">
+
+        <!-- Employee Form -->
+        <div class="panel form-panel">
+
+            <h2 id="formTitle">Add New Employee</h2>
+            <p class="panel-description">Enter employee information below.</p>
+
+            <form id="employeeForm">
+
+                <div class="form-group">
+                    <label>Employee ID</label>
+                    <input type="number" id="empId"
+                           placeholder="Enter employee ID"
+                           min="1" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" id="empName"
+                           placeholder="Enter full name"
+                           maxlength="60" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Department</label>
+                    <input type="text" id="empDepartment"
+                           placeholder="e.g. IT, HR, Finance"
+                           maxlength="40" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Designation</label>
+                    <input type="text" id="empDesignation"
+                           placeholder="Enter designation"
+                           maxlength="50" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Monthly Salary (₹)</label>
+                    <input type="number" id="empSalary"
+                           placeholder="Enter salary"
+                           min="0" step="0.01" required>
+                </div>
+
+                <button type="submit" id="submitBtn" class="primary-btn full-btn">
+                    + Add Employee
+                </button>
+
+                <button type="button" id="cancelBtn"
+                        class="secondary-btn full-btn hidden">
+                    Cancel Edit
+                </button>
+
+            </form>
+        </div>
+
+        <!-- Employee Records -->
+        <div class="panel records-panel">
+
+            <div class="panel-heading">
+                <div>
+                    <h2>Employee Records</h2>
+                    <p class="panel-description">View and manage all employees.</p>
+                </div>
+                <span class="record-badge" id="recordCount">0 Records</span>
+            </div>
+
+            <div class="filters">
+
+                <input type="text" id="searchInput"
+                       placeholder="Search employees...">
+
+                <select id="departmentFilter">
+                    <option value="">All Departments</option>
+                </select>
+
+                <select id="sortSelect">
+                    <option value="id-asc">ID: Low to High</option>
+                    <option value="id-desc">ID: High to Low</option>
+                    <option value="name-asc">Name: A-Z</option>
+                    <option value="name-desc">Name: Z-A</option>
+                    <option value="salary-desc">Salary: High to Low</option>
+                    <option value="salary-asc">Salary: Low to High</option>
+                </select>
+
+            </div>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Employee</th>
+                            <th>Department</th>
+                            <th>Designation</th>
+                            <th>Salary</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="employeeTable">
+                        <tr>
+                            <td colspan="6" class="empty-message">
+                                No employee records available.
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- Analytics -->
+    <section class="panel analytics-panel">
+
+        <div class="section-heading">
+            <div>
+                <h2>Workforce Analytics</h2>
+                <p class="panel-description">
+                    Understand your employee distribution and salary structure.
+                </p>
+            </div>
+        </div>
+
+        <div class="analytics-grid">
+
+            <div class="chart-card">
+                <h3>Department Distribution</h3>
+                <canvas id="departmentChart" width="500" height="230"></canvas>
+                <div id="departmentLegend" class="chart-legend"></div>
+            </div>
+
+            <div class="chart-card">
+                <h3>Salary Distribution</h3>
+                <canvas id="salaryChart" width="500" height="230"></canvas>
+                <p class="chart-note">Employees grouped by monthly salary.</p>
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- Additional Summary -->
+    <section class="panel summary-panel">
+        <h2>Quick Summary</h2>
+
+        <div class="summary-grid">
+            <div class="summary-item">
+                <span>Largest Department</span>
+                <h3 id="topDepartment">—</h3>
+            </div>
+
+            <div class="summary-item">
+                <span>Total Monthly Payroll</span>
+                <h3 id="totalPayroll">₹0</h3>
+            </div>
+        </div>
+    </section>
+
+</main>
+
+<!-- Employee Profile Popup -->
+<div id="profileModal" class="modal">
+    <div class="modal-content">
+        <button class="close-btn" id="closeProfile">×</button>
+        <h2>Employee Profile</h2>
+        <div id="profileContent"></div>
+    </div>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<footer>
+    Employee Database Management System
+    <br>
+    Built using Doubly Linked List | Data Structures Project
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
